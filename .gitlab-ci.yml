@@ -1,0 +1,102 @@
+stages:
+  - affiliates
+  - shoppaww
+  - designroom
+  - readpaww
+productions:
+  stage: affiliates
+  before_script:
+    - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+    - eval "$(ssh-agent -s)"
+
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # - ssh-keyscan -H $HOST_SERVER >> ~/.ssh/known_hosts
+    # - chmod 644 ~/.ssh/known_hosts zzdypszw@ps02.zwhhosting.com
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+
+  script:
+    - echo "Deplay update affiliates.saiimogdev.com"
+    - ssh -p $SSH_PORT $SERVER_USER -C "cd $AFFILIATES_PATH && pwd && git reset --hard && git pull && git status && chmod +x run-update.sh && sh run-update.sh"
+    - echo "Deplay update tongjudlaw.saiimogdev.com"
+    - ssh -p $SSH_PORT $SERVER_USER -C "cd $TONGJUDLAW_PATH && pwd && git reset --hard && git pull && git status && chmod +x run-update.sh && sh run-update.sh"
+
+    # && sync; echo 1 > /proc/sys/vm/drop_caches && sync; echo 2 > /proc/sys/vm/drop_caches && sync; echo 3 > /proc/sys/vm/drop_caches"
+    - echo "Cleaning up"
+    - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"
+    - echo "Update successful!"
+  only:
+    - main
+
+shoppaww:
+  stage: shoppaww
+  before_script:
+    - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+    - eval "$(ssh-agent -s)"
+
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # - ssh-keyscan -H $HOST_SERVER >> ~/.ssh/known_hosts
+    # - chmod 644 ~/.ssh/known_hosts zzdypszw@ps02.zwhhosting.com
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+
+  script:
+    - echo "Deplay update shoppaww.saiimogdev.com"
+    - ssh -p $SSH_PORT $SERVER_USER -C "cd $SHOPPAWW_PATH && pwd && git reset --hard && git pull && git status && chmod +x run-update.sh && sh run-update.sh"
+
+    # && sync; echo 1 > /proc/sys/vm/drop_caches && sync; echo 2 > /proc/sys/vm/drop_caches && sync; echo 3 > /proc/sys/vm/drop_caches"
+    - echo "Cleaning up"
+    - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"
+    - echo "Update successful!"
+  only:
+    - shoppaww
+
+designroom:
+  stage: designroom
+  before_script:
+    - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+    - eval "$(ssh-agent -s)"
+
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # - ssh-keyscan -H $HOST_SERVER >> ~/.ssh/known_hosts
+    # - chmod 644 ~/.ssh/known_hosts zzdypszw@ps02.zwhhosting.com
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+
+  script:
+    - echo "Deplay update designroom.saiimogdev.com"
+    - ssh -p $SSH_PORT $SERVER_USER -C "cd $DESIGNROOM_PATH && pwd && git reset --hard && git pull && git status && chmod +x run-update.sh && sh run-update.sh"
+
+    # && sync; echo 1 > /proc/sys/vm/drop_caches && sync; echo 2 > /proc/sys/vm/drop_caches && sync; echo 3 > /proc/sys/vm/drop_caches"
+    - echo "Cleaning up"
+    - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"
+    - echo "Update successful!"
+  only:
+    - designroom
+
+readpaww:
+  stage: readpaww
+  before_script:
+    - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+    - eval "$(ssh-agent -s)"
+
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # - ssh-keyscan -H $HOST_SERVER >> ~/.ssh/known_hosts
+    # - chmod 644 ~/.ssh/known_hosts zzdypszw@ps02.zwhhosting.com
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+
+  script:
+    - echo "Deplay update readpaww.saiimogdev.com"
+    - ssh -p $SSH_PORT $SERVER_USER -C "cd $READPAWW_PATH && pwd && git reset --hard && git pull && git status && chmod +x run-update.sh && sh run-update.sh"
+
+    # && sync; echo 1 > /proc/sys/vm/drop_caches && sync; echo 2 > /proc/sys/vm/drop_caches && sync; echo 3 > /proc/sys/vm/drop_caches"
+    - echo "Cleaning up"
+    - rm -rf "%CACHE_PATH%/%CI_PIPELINE_ID%"
+    - echo "Update successful!"
+  only:
+    - readpaww
